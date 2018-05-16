@@ -1,5 +1,5 @@
 /*
- * SeeedOLED.h
+ * copied from GloveDisplay.h
  * SSD130x OLED Driver Library
  *
  * Copyright (c) 2011 seeed technology inc.
@@ -22,10 +22,10 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef SeeedOLED_data_H
-#define SeeedOLED_data_H
+#ifndef GloveDisplay_h
+#define GloveDisplay_h
 
-// SeeedOLED Instruction set addresses
+// GloveDisplay Instruction set addresses
 
 #if defined(ARDUINO) && ARDUINO >= 100
 #include "Arduino.h"
@@ -34,23 +34,23 @@
 #include "Wire.h"
 #endif
 
-#define SeeedOLED_Max_X                 127 //128 Pixels
-#define SeeedOLED_Max_Y                 63  //64  Pixels
+#define GloveDisplay_Max_X                 127 //128 Pixels
+#define GloveDisplay_Max_Y                 63  //64  Pixels
 
 #define PAGE_MODE                       01
 #define HORIZONTAL_MODE                 02
 
 
-#define SeeedOLED_Address               0x3c
-#define SeeedOLED_Command_Mode          0x80
-#define SeeedOLED_Data_Mode             0x40
-#define SeeedOLED_Display_Off_Cmd       0xAE
-#define SeeedOLED_Display_On_Cmd        0xAF
-#define SeeedOLED_Normal_Display_Cmd    0xA6
-#define SeeedOLED_Inverse_Display_Cmd   0xA7
-#define SeeedOLED_Activate_Scroll_Cmd   0x2F
-#define SeeedOLED_Dectivate_Scroll_Cmd  0x2E
-#define SeeedOLED_Set_Brightness_Cmd    0x81
+#define GloveDisplay_Address               0x3c
+#define GloveDisplay_Command_Mode          0x80
+#define GloveDisplay_Data_Mode             0x40
+#define GloveDisplay_Display_Off_Cmd       0xAE
+#define GloveDisplay_Display_On_Cmd        0xAF
+#define GloveDisplay_Normal_Display_Cmd    0xA6
+#define GloveDisplay_Inverse_Display_Cmd   0xA7
+#define GloveDisplay_Activate_Scroll_Cmd   0x2F
+#define GloveDisplay_Dectivate_Scroll_Cmd  0x2E
+#define GloveDisplay_Set_Brightness_Cmd    0x81
 
 #define Scroll_Left             0x00
 #define Scroll_Right            0x01
@@ -65,7 +65,7 @@
 #define Scroll_256Frames        0x3
 
 
-class SeeedOLED {
+class GloveDisplay {
 
 public:
 
@@ -87,7 +87,9 @@ void setTextXY(unsigned char Row, unsigned char Column);
 void clearDisplay();
 void setBrightness(unsigned char Brightness);
 void putChar(unsigned char c);
+void putInvertedChar(unsigned char c);
 void putString(const char *String);
+void putInvertedString(const char *String);
 unsigned char putNumber(long n);
 unsigned char putFloat(float floatNumber,unsigned char decimal);
 unsigned char putFloat(float floatNumber);
@@ -99,6 +101,6 @@ void deactivateScroll();
 
 };
 
-extern SeeedOLED SeeedOled;  // SeeedOLED object
+extern GloveDisplay Display;  // SeeedOLED object
 
 #endif

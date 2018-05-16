@@ -1,5 +1,5 @@
 /*
- * SeeedOLED.cpp
+ * GloveDisplay.cpp
  * SSD130x OLED Driver Library
  *
  * Copyright (c) 2011 seeed technology inc.
@@ -23,10 +23,10 @@
  */
 
 #include "Wire.h"
-#include "SeeedOLED.h"
+#include "GloveDisplay.h"
 
 #if (defined(__AVR__))
-#include <avr\pgmspace.h>
+#include <avr/pgmspace.h>
 #else
 #include <pgmspace.h>
 #endif
@@ -133,45 +133,191 @@ const unsigned char BasicFont[][8] PROGMEM=
   {0x00,0x00,0x7F,0x00,0x00,0x00,0x00,0x00},
   {0x00,0x41,0x36,0x08,0x00,0x00,0x00,0x00},
   {0x00,0x02,0x01,0x01,0x02,0x01,0x00,0x00},
-  {0x00,0x02,0x05,0x05,0x02,0x00,0x00,0x00}
+  {0x00,0x02,0x05,0x05,0x02,0x00,0x00,0x00},
+  // new thingies:
+  {	  B00000000,
+	  B01111100,
+	  B01000100,
+	  B01000100,
+	  B01000100,
+	  B01111100,
+	  B00000000,
+	  B00000000
+  },
+  {	  B00000000,
+	  B01000100,
+	  B00101000,
+	  B00010000,
+	  B00101000,
+	  B01000100,
+	  B00000000,
+	  B00000000
+  },
+  {	  B00000000,
+	  B01100000,
+	  B01011000,
+	  B01000100,
+	  B01011000,
+	  B01100000,
+	  B00000000,
+	  B00000000
+  },
+  {	  B00000000,
+	  B00111000,
+	  B01000100,
+	  B01000100,
+	  B01000100,
+	  B00111000,
+	  B00000000,
+	  B00000000
+  },
+  {	  B00000000,
+	  B01111101,
+	  B01000101,
+	  B01000101,
+	  B01000101,
+	  B01111101,
+	  B00000000,
+	  B00000000
+  },
+  {	  B00000000,
+	  B01000101,
+	  B00101001,
+	  B00010001,
+	  B00101001,
+	  B01000101,
+	  B00000000,
+	  B00000000
+  },
+  {	  B00000000,
+	  B01100001,
+	  B01011001,
+	  B01000101,
+	  B01011001,
+	  B01100001,
+	  B00000000,
+	  B00000000
+  },
+  {	  B00000000,
+	  B00111001,
+	  B01000101,
+	  B01000101,
+	  B01000101,
+	  B00111001,
+	  B00000000,
+	  B00000000
+  },
+  {	  B00000000,
+	  B01111100,
+	  B01000100,
+	  B01000101,
+	  B01000100,
+	  B01111100,
+	  B00000000,
+	  B00000000
+  },
+  {	  B00000000,
+	  B01000100,
+	  B00101000,
+	  B00010001,
+	  B00101000,
+	  B01000100,
+	  B00000000,
+	  B00000000
+  },
+  {	  B00000000,
+	  B01100000,
+	  B01011000,
+	  B01000101,
+	  B01011000,
+	  B01100000,
+	  B00000000,
+	  B00000000
+  },
+  {	  B00000000,
+	  B00111000,
+	  B01000100,
+	  B01000101,
+	  B01000100,
+	  B00111000,
+	  B00000000,
+	  B00000000
+  },
+  {	  B00000000,
+	  B01111100,
+	  B01000100,
+	  B01000100,
+	  B01000101,
+	  B01111101,
+	  B00000000,
+	  B00000000
+  },
+  {	  B00000000,
+	  B01000100,
+	  B00101000,
+	  B00010000,
+	  B00101001,
+	  B01000101,
+	  B00000000,
+	  B00000000
+  },
+  {	  B00000000,
+	  B01100000,
+	  B01011000,
+	  B01000100,
+	  B01011001,
+	  B01100001,
+	  B00000000,
+	  B00000000
+  },
+  {	  B00000000,
+	  B00111000,
+	  B01000100,
+	  B01000100,
+	  B01000101,
+	  B00111001,
+	  B00000000,
+	  B00000000
+  },
+  {0x00,0xff,0xff,0xff,0xff,0xff,0xff,0x00},
 };
 
-void SeeedOLED::init(void)
+void GloveDisplay::init(void)
 {
-    sendCommand(SeeedOLED_Display_Off_Cmd);     //display off
+    sendCommand(GloveDisplay_Display_Off_Cmd);     //display off
     delay(5);
-    sendCommand(SeeedOLED_Display_On_Cmd);  //display on
+    sendCommand(GloveDisplay_Display_On_Cmd);  //display on
     delay(5);
-    sendCommand(SeeedOLED_Normal_Display_Cmd);  //Set Normal Display (default)
+    sendCommand(GloveDisplay_Normal_Display_Cmd);  //Set Normal Display (default)
 }
 
-void SeeedOLED::sendCommand(unsigned char command)
+void GloveDisplay::sendCommand(unsigned char command)
 {
-  Wire.beginTransmission(SeeedOLED_Address); // begin I2C communication
+  Wire.beginTransmission(GloveDisplay_Address); // begin I2C communication
 #if defined(ARDUINO) && ARDUINO >= 100
-  Wire.write(SeeedOLED_Command_Mode);        // Set OLED Command mode
+  Wire.write(GloveDisplay_Command_Mode);        // Set OLED Command mode
   Wire.write(command);
 #else
-  Wire.send(SeeedOLED_Command_Mode);         // Set OLED Command mode
+  Wire.send(GloveDisplay_Command_Mode);         // Set OLED Command mode
   Wire.send(command);
 #endif
   Wire.endTransmission();                // End I2C communication
 }
 
-void SeeedOLED::setBrightness(unsigned char Brightness)
+void GloveDisplay::setBrightness(unsigned char Brightness)
 {
-   sendCommand(SeeedOLED_Set_Brightness_Cmd);
+   sendCommand(GloveDisplay_Set_Brightness_Cmd);
    sendCommand(Brightness);
 }
 
-void SeeedOLED::setHorizontalMode()
+void GloveDisplay::setHorizontalMode()
 {
     addressingMode = HORIZONTAL_MODE;
     sendCommand(0x20);          //set addressing mode
     sendCommand(0x00);          //set horizontal addressing mode
 }
 
-void SeeedOLED::setPageMode()
+void GloveDisplay::setPageMode()
 {
     addressingMode = PAGE_MODE;
     sendCommand(0x20);          //set addressing mode
@@ -179,7 +325,7 @@ void SeeedOLED::setPageMode()
 }
 
 
-void SeeedOLED::setTextXY(unsigned char Row, unsigned char Column)
+void GloveDisplay::setTextXY(unsigned char Row, unsigned char Column)
 {
     sendCommand(0xB0 + Row);            //set page address
     sendCommand(0x00 + (8*Column & 0x0F));  //set column lower address
@@ -187,10 +333,10 @@ void SeeedOLED::setTextXY(unsigned char Row, unsigned char Column)
 }
 
 
-void SeeedOLED::clearDisplay()
+void GloveDisplay::clearDisplay()
 {
   unsigned char i,j;
-  sendCommand(SeeedOLED_Display_Off_Cmd);   //display off
+  sendCommand(GloveDisplay_Display_Off_Cmd);   //display off
   for(j=0;j<8;j++)
   {
     setTextXY(j,0);
@@ -201,26 +347,26 @@ void SeeedOLED::clearDisplay()
       }
     }
   }
-  sendCommand(SeeedOLED_Display_On_Cmd);    //display on
+  sendCommand(GloveDisplay_Display_On_Cmd);    //display on
   setTextXY(0,0);
 }
 
-void SeeedOLED::sendData(unsigned char Data)
+void GloveDisplay::sendData(unsigned char Data)
 {
-     Wire.beginTransmission(SeeedOLED_Address); // begin I2C transmission
+     Wire.beginTransmission(GloveDisplay_Address); // begin I2C transmission
 #if defined(ARDUINO) && ARDUINO >= 100
-     Wire.write(SeeedOLED_Data_Mode);            // data mode
+     Wire.write(GloveDisplay_Data_Mode);            // data mode
      Wire.write(Data);
 #else
-     Wire.send(SeeedOLED_Data_Mode);            // data mode
+     Wire.send(GloveDisplay_Data_Mode);            // data mode
      Wire.send(Data);
 #endif
      Wire.endTransmission();                    // stop I2C transmission
 }
 
-void SeeedOLED::putChar(unsigned char C)
+void GloveDisplay::putChar(unsigned char C)
 {
-    if(C < 32 || C > 127) //Ignore non-printable ASCII characters. This can be modified for multilingual font.
+    if(C < 32 || C > 0x90) //Ignore non-printable ASCII characters. This can be modified for multilingual font.
     {
     C=' '; //Space
     }
@@ -232,7 +378,31 @@ void SeeedOLED::putChar(unsigned char C)
     }
 }
 
-void SeeedOLED::putString(const char *String)
+void GloveDisplay::putInvertedChar(unsigned char C)
+{
+    if(C < 32 || C > 0x90) //Ignore non-printable ASCII characters. This can be modified for multilingual font.
+    {
+    C=' '; //Space
+    }
+    unsigned char i=0;
+    for(i=0;i<8;i++)
+    {
+       //read bytes from code memory
+       sendData(~pgm_read_byte(&BasicFont[C-32][i])); //font array starts at 0, ASCII starts at 32. Hence the translation
+    }
+}
+
+void GloveDisplay::putInvertedString(const char *String)
+{
+    unsigned char i=0;
+    while(String[i])
+    {
+        putInvertedChar(String[i]);
+        i++;
+    }
+}
+
+void GloveDisplay::putString(const char *String)
 {
     unsigned char i=0;
     while(String[i])
@@ -242,7 +412,7 @@ void SeeedOLED::putString(const char *String)
     }
 }
 
-unsigned char SeeedOLED::putNumber(long long_num)
+unsigned char GloveDisplay::putNumber(long long_num)
 {
   unsigned char char_buffer[10]="";
   unsigned char i = 0;
@@ -276,7 +446,7 @@ unsigned char SeeedOLED::putNumber(long long_num)
 
 }
 
-unsigned char SeeedOLED::putFloat(float floatNumber,unsigned char decimal)
+unsigned char GloveDisplay::putFloat(float floatNumber,unsigned char decimal)
 {
   unsigned int temp=0;
   float decy=0.0;
@@ -312,7 +482,7 @@ unsigned char SeeedOLED::putFloat(float floatNumber,unsigned char decimal)
   f +=decimal;
   return f;
 }
-unsigned char SeeedOLED::putFloat(float floatNumber)
+unsigned char GloveDisplay::putFloat(float floatNumber)
 {
   unsigned char decimal=2;
   unsigned int temp=0;
@@ -350,7 +520,7 @@ unsigned char SeeedOLED::putFloat(float floatNumber)
   return f;
 }
 
-void SeeedOLED::drawBitmap(unsigned char *bitmaparray,int bytes)
+void GloveDisplay::drawBitmap(unsigned char *bitmaparray,int bytes)
 {
   char localAddressMode = addressingMode;
   if(addressingMode != HORIZONTAL_MODE)
@@ -372,7 +542,7 @@ void SeeedOLED::drawBitmap(unsigned char *bitmaparray,int bytes)
   
 }
 
-void SeeedOLED::setHorizontalScrollProperties(unsigned char direction, unsigned char startPage, unsigned char endPage, unsigned char scrollSpeed)
+void GloveDisplay::setHorizontalScrollProperties(unsigned char direction, unsigned char startPage, unsigned char endPage, unsigned char scrollSpeed)
 {
 /*
 Use the following defines for 'direction' :
@@ -412,25 +582,26 @@ Use the following defines for 'scrollSpeed' :
     sendCommand(0xFF);
 }
 
-void SeeedOLED::activateScroll()
+void GloveDisplay::activateScroll()
 {
-    sendCommand(SeeedOLED_Activate_Scroll_Cmd);
+    sendCommand(GloveDisplay_Activate_Scroll_Cmd);
 }
 
-void SeeedOLED::deactivateScroll()
+void GloveDisplay::deactivateScroll()
 {
-    sendCommand(SeeedOLED_Dectivate_Scroll_Cmd);
+    sendCommand(GloveDisplay_Dectivate_Scroll_Cmd);
 }
 
-void SeeedOLED::setNormalDisplay()
+void GloveDisplay::setNormalDisplay()
 {
-    sendCommand(SeeedOLED_Normal_Display_Cmd);
+    sendCommand(GloveDisplay_Normal_Display_Cmd);
 }
 
-void SeeedOLED::setInverseDisplay()
+void GloveDisplay::setInverseDisplay()
 {
-    sendCommand(SeeedOLED_Inverse_Display_Cmd);
+    sendCommand(GloveDisplay_Inverse_Display_Cmd);
 }
 
 
-SeeedOLED SeeedOled;  // Preinstantiate Objects
+GloveDisplay Display;  // Preinstantiate Objects
+
